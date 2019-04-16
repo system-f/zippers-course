@@ -93,8 +93,8 @@ extend ::
   (f x -> y)
   -> f x
   -> f y
-extend =
-  error "todo: Z03#extend"
+extend f =
+  fmap f . cojoin
 
 -- | Implement composition. Note that this type signature is the same as the signature for
 -- (.) :: (f y -> z) -> (f x -> y) -> f x -> z
@@ -111,8 +111,8 @@ comonadCompose ::
   -> (f x -> y)
   -> f x
   -> z
-comonadCompose =
-  error "todo: Z03#comonadCompose"
+comonadCompose f g =
+  f . extend g
 
 ---- All zippers are comonads!
 
@@ -168,7 +168,7 @@ law3 x =
 -- /Tip/ We already wrote this function in `module Z00`
 instance Cojoin FiveOfZipper where
   cojoin =
-    error "todo: Z03#FiveOfZipper.cojoin"
+    Z00.duplicate
 
 -- | Implement `cojoin` for `ListZipper`. Ensure that `law1` passes.
 --
@@ -187,7 +187,7 @@ instance Cojoin FiveOfZipper where
 -- ListZipper (ListZipper 5 (ListDerivative [4,3,2,1] [])) (ListDerivative [ListZipper 4 (ListDerivative [3,2,1] [5]),ListZipper 3 (ListDerivative [2,1] [4,5]),ListZipper 2 (ListDerivative [1] [3,4,5]),ListZipper 1 (ListDerivative [] [2,3,4,5])] [])
 instance Cojoin ListZipper where
   cojoin =
-    error "todo: Z03#ListZipper.cojoin"
+    Z01.duplicate
 
 -- | Implement `copure` for `FiveOfZipper`. Ensure that `law1`, `law2` and `law3` passes.
 --
@@ -203,7 +203,7 @@ instance Cojoin ListZipper where
 -- 14
 instance Comonad FiveOfZipper where
   copure =
-    error "todo: Z03#FiveOfZipper.copure"
+    Z00.getFocus
 
 -- | Implement `copure` for `ListZipper`. Ensure that `law1`, `law2` and `law3` passes.
 --
@@ -219,4 +219,4 @@ instance Comonad FiveOfZipper where
 -- 1
 instance Comonad ListZipper where
   copure =
-    error "todo: Z03#ListZipper.copure"
+    Z01.getFocus

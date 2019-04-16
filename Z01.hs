@@ -72,8 +72,8 @@ instance Functor ListZipper where
 fromListZipper ::
   ListZipper x
   -> [x]
-fromListZipper =
-  error "todo: Z01#fromListZipper"
+fromListZipper (ListZipper x (ListDerivative l r)) =
+  reverse l ++ x : r
 
 -- | Create a zipper for a list of values, with focus on the first value.
 -- Returns `Nothing` if given an empty list.
@@ -83,8 +83,10 @@ fromListZipper =
 toListZipper ::
   [x]
   -> Maybe (ListZipper x)
-toListZipper =
-  error "todo: Z01#toListZipper"
+toListZipper [] =
+  Nothing
+toListZipper (h:t) =
+  Just (ListZipper h (ListDerivative [] t))
 
 -- | Move the zipper focus one position to the right.
 --
@@ -101,8 +103,10 @@ toListZipper =
 moveRight ::
   ListZipper x
   -> Maybe (ListZipper x)
-moveRight =
-  error "todo: Z01#moveRight"
+moveRight (ListZipper _ (ListDerivative _ [])) =
+  Nothing
+moveRight (ListZipper x (ListDerivative l (h:t))) =
+  Just (ListZipper h (ListDerivative (x:l) t))
 
 -- | Move the zipper focus one position to the left.
 --
@@ -119,8 +123,10 @@ moveRight =
 moveLeft ::
   ListZipper x
   -> Maybe (ListZipper x)
-moveLeft =
-  error "todo: Z01#moveLeft"
+moveLeft (ListZipper _ (ListDerivative [] _)) =
+  Nothing
+moveLeft (ListZipper x (ListDerivative (h:t) r)) =
+  Just (ListZipper h (ListDerivative t (x:r)))
 
 -- | Move the zipper focus one position to the right.
 --
@@ -139,8 +145,12 @@ moveLeft =
 moveRightCycle ::
   ListZipper x
   -> ListZipper x
-moveRightCycle =
-  error "todo: Z01#moveRightCycle"
+moveRightCycle (ListZipper x (ListDerivative l [])) =
+  let (h, t) =
+        reverse1 (x, l)
+  in  ListZipper h (ListDerivative [] t)
+moveRightCycle (ListZipper x (ListDerivative l (h:t))) =
+  ListZipper h (ListDerivative (x:l) t)
 
 -- | Move the zipper focus one position to the left.
 --
@@ -159,8 +169,12 @@ moveRightCycle =
 moveLeftCycle ::
   ListZipper x
   -> ListZipper x
-moveLeftCycle =
-  error "todo: Z01#moveLeftCycle"
+moveLeftCycle (ListZipper x (ListDerivative [] r)) =
+  let (h, t) =
+        reverse1 (x, r)
+  in  ListZipper h (ListDerivative t [])
+moveLeftCycle (ListZipper x (ListDerivative (h:t) r)) =
+  ListZipper h (ListDerivative t (x:r))
 
 -- | Modify the zipper focus using the given function.
 --
@@ -176,8 +190,8 @@ modifyFocus ::
   (x -> x)
   -> ListZipper x
   -> ListZipper x
-modifyFocus =
-  error "todo: Z01#modifyFocus"
+modifyFocus k (ListZipper x (ListDerivative l r)) =
+   ListZipper (k x) (ListDerivative l r)
 
 -- | Set the zipper focus to the given value.
 --
@@ -196,7 +210,7 @@ setFocus ::
   -> ListZipper x
   -> ListZipper x
 setFocus =
-  error "todo: Z01#setFocus"
+  modifyFocus . const
 
 -- | Return the zipper focus.
 --
@@ -211,8 +225,8 @@ setFocus =
 getFocus ::
   ListZipper x
   -> x
-getFocus =
-  error "todo: Z01#getFocus"
+getFocus (ListZipper x _) =
+  x
 
 -- | Duplicate a zipper of zippers, from the given zipper.
 --
@@ -231,8 +245,8 @@ getFocus =
 duplicate ::
   ListZipper x
   -> ListZipper (ListZipper x)
-duplicate =
-  error "todo: Z01#duplicate"
+duplicate z =
+  ListZipper z (ListDerivative (unfoldDup moveLeft z) (unfoldDup moveRight z))
 
 -- | This is a test of `getFocus` and `duplicate` that should always return `Nothing`.
 -- If the test fails, two unequal values (which should be equal) are returned in `Just`.
@@ -328,8 +342,12 @@ law3 x =
 moveEnd ::
   ListZipper x
   -> ListZipper x
-moveEnd =
-  error "todo: Z01#moveEnd"
+moveEnd z = 
+  case moveRight z of
+    Nothing ->
+      z
+    Just z' ->
+      moveEnd z'
 
 -- | Move the zipper focus to the start position.
 --
@@ -346,8 +364,12 @@ moveEnd =
 moveStart ::
   ListZipper x
   -> ListZipper x
-moveStart =
-  error "todo: Z01#moveStart"
+moveStart z = 
+  case moveLeft z of
+    Nothing ->
+      z
+    Just z' ->
+      moveStart z'
 
 -- | Move the zipper focus right until the focus satisfies the given predicate.
 --
@@ -365,8 +387,8 @@ findRight ::
   (x -> Bool)
   -> ListZipper x
   -> Maybe (ListZipper x)
-findRight =
-  error "todo: Z01#findRight"
+findRight p =
+  find (p . getFocus) . rights . duplicate
 
 -- | Move the zipper focus left until the focus satisfies the given predicate.
 --
@@ -384,8 +406,8 @@ findLeft ::
   (x -> Bool)
   -> ListZipper x
   -> Maybe (ListZipper x)
-findLeft =
-  error "todo: Z01#findLeft"
+findLeft p =
+  find (p . getFocus) . lefts . duplicate
 
 -- | If the zipper focus satisfies the given predicate, return the given zipper.
 -- Otherwise, move the zipper focus left until the focus satisfies the given predicate.
@@ -411,8 +433,10 @@ example1 ::
   Integral x =>
   [x]
   -> [x]
-example1 =
-  error "todo: Z01#example1"
+example1 xs =
+  let secondToLastRight p xs' =
+        toListZipper xs' >>= findLeftIncl p . moveEnd >>= findLeft p >>= moveRight
+  in  maybe xs (fromListZipper . modifyFocus (+99)) (secondToLastRight even xs)
 
 data Move =
   MoveLeft
@@ -459,5 +483,16 @@ example2 ::
   -> [Move]
   -> [([Move], String)]
   -> [([Move], String)]
-example2 =
-  error "todo: Z01#example2"
+example2 k mvs xs =
+  let loop ::
+        [Move]
+        -> ListZipper (Bool, ([Move], String))
+        -> ListZipper (Bool, ([Move], String))
+      loop mvs' z =
+        let next z' =
+              let (go, (m, s)) = getFocus z'
+              in  bool z' (loop m (setFocus (False, (m, k s)) z')) go
+        in  maybe z next (makeMoves mvs' z)
+      start =
+        fmap snd . fromListZipper . loop mvs . fmap ((,) True)
+ in  maybe xs start (toListZipper xs)

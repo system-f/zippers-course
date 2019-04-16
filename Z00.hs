@@ -116,8 +116,8 @@ instance Functor FiveOfZipper where
 toFiveOfZipper ::
   FiveOf x
   -> FiveOfZipper x
-toFiveOfZipper =
-  error "todo: Z00#toFiveOfZipper"
+toFiveOfZipper (FiveOf x1 x2 x3 x4 x5) =
+  FiveOfZipper x1 (FiveOfDerivative One x2 x3 x4 x5)
 
 -- | Create five values from a zipper.
 --
@@ -132,8 +132,8 @@ toFiveOfZipper =
 fromFiveOfZipper ::
   FiveOfZipper x
   -> FiveOf x
-fromFiveOfZipper =
-  error "todo: Z00#fromFiveOfZipper"
+fromFiveOfZipper (FiveOfZipper x1 (FiveOfDerivative _ x2 x3 x4 x5)) =
+  FiveOf x1 x2 x3 x4 x5
 
 -- | Move the zipper focus one position to the right.
 --
@@ -155,8 +155,8 @@ fromFiveOfZipper =
 moveRight ::
   FiveOfZipper x
   -> Maybe (FiveOfZipper x)
-moveRight =
-  error "todo: Z00#moveRight"
+moveRight (FiveOfZipper x1 (FiveOfDerivative pos x2 x3 x4 x5)) =
+  fmap (\p -> FiveOfZipper x1 (FiveOfDerivative p x2 x3 x4 x5)) (add1 pos)
 
 -- | Move the zipper focus one position to the left.
 --
@@ -178,8 +178,8 @@ moveRight =
 moveLeft ::
   FiveOfZipper x
   -> Maybe (FiveOfZipper x)
-moveLeft =
-  error "todo: Z00#moveLeft"
+moveLeft (FiveOfZipper x1 (FiveOfDerivative pos x2 x3 x4 x5)) =
+  fmap (\p -> FiveOfZipper x1 (FiveOfDerivative p x2 x3 x4 x5)) (subtract1 pos)
 
 -- | Move the zipper focus one position to the right.
 --
@@ -205,8 +205,8 @@ moveLeft =
 moveRightCycle ::
   FiveOfZipper x
   -> FiveOfZipper x
-moveRightCycle =
-  error "todo: Z00#moveRightCycle"
+moveRightCycle (FiveOfZipper x1 (FiveOfDerivative p x2 x3 x4 x5)) =
+  FiveOfZipper x1 (FiveOfDerivative (add1Cycle p) x2 x3 x4 x5)
 
 -- | Move the zipper focus one position to the left.
 --
@@ -229,8 +229,8 @@ moveRightCycle =
 moveLeftCycle ::
   FiveOfZipper x
   -> FiveOfZipper x
-moveLeftCycle =
-  error "todo: Z00#moveLeftCycle"
+moveLeftCycle (FiveOfZipper x1 (FiveOfDerivative p x2 x3 x4 x5)) =
+  FiveOfZipper x1 (FiveOfDerivative (subtract1Cycle p) x2 x3 x4 x5)
 
 -- | Move the zipper focus the given number of positions
 --   * to the left if negative
@@ -243,8 +243,10 @@ move ::
   Int
   -> FiveOfZipper x
   -> Maybe (FiveOfZipper x)
-move =
-  error "todo: Z00#move"
+move n =
+  let n' = abs n
+      k = if n < 0 then moveLeft else moveRight
+  in  foldr (>=>) pure . replicate n' $ k
 
 -- | Move the zipper focus the given number of positions
 --   * to the left if negative
@@ -322,8 +324,10 @@ moveCycle ::
   Int
   -> FiveOfZipper x
   -> FiveOfZipper x
-moveCycle =
-  error "todo: Z00#moveCycle"
+moveCycle n =
+  let n' = abs (n `mod` 5)
+      k = if n < 0 then moveLeftCycle else moveRightCycle
+  in  foldr (.) id . replicate n' $ k
 
 -- | Modify the zipper focus using the given function.
 --
@@ -339,8 +343,20 @@ modifyFocus ::
   (x -> x)
   -> FiveOfZipper x
   -> FiveOfZipper x
-modifyFocus =
-  error "todo: Z00#modifyFocus"
+modifyFocus k (FiveOfZipper x1 (FiveOfDerivative pos x2 x3 x4 x5)) =
+  let (k1, k2, k3, k4, k5) =
+        case pos of
+          One ->
+            (k, id, id, id, id)
+          Two ->
+            (id, k, id, id, id)
+          Three ->
+            (id, id, k, id, id)
+          Four ->
+            (id, id, id, k, id)
+          Five ->
+            (id, id, id, id, k)
+  in  FiveOfZipper (k1 x1) (FiveOfDerivative pos (k2 x2) (k3 x3) (k4 x4) (k5 x5))
 
 -- | Set the zipper focus to the given value.
 --
@@ -359,7 +375,7 @@ setFocus ::
   -> FiveOfZipper x
   -> FiveOfZipper x
 setFocus =
-  error "todo: Z00#setFocus"
+  modifyFocus . const
 
 -- | Return the zipper focus.
 --
@@ -374,8 +390,18 @@ setFocus =
 getFocus ::
   FiveOfZipper x
   -> x
-getFocus =
-  error "todo: Z00#getFocus"
+getFocus (FiveOfZipper x1 (FiveOfDerivative pos x2 x3 x4 x5)) =
+  case pos of
+    One ->
+      x1
+    Two ->
+      x2
+    Three ->
+      x3
+    Four ->
+      x4
+    Five ->
+      x5
 
 -- | Duplicate a zipper of zippers, from the given zipper.
 --
@@ -384,8 +410,10 @@ getFocus =
 duplicate ::
   FiveOfZipper x
   -> FiveOfZipper (FiveOfZipper x)
-duplicate =
-  error "todo: Z00#duplicate"
+duplicate (FiveOfZipper x1 (FiveOfDerivative pos x2 x3 x4 x5)) =
+  let z' pos' =
+        FiveOfZipper x1 (FiveOfDerivative pos' x2 x3 x4 x5)
+  in  FiveOfZipper (z' One) (FiveOfDerivative pos (z' Two) (z' Three) (z' Four) (z' Five))
 
 -- | This is a test of `getFocus` and `duplicate` that should always return `Nothing`.
 -- If the test fails, two unequal values (which should be equal) are returned in `Just`.
@@ -471,8 +499,8 @@ findRight ::
   (x -> Bool)
   -> FiveOfZipper x
   -> Maybe (FiveOfZipper x)
-findRight =
-  error "todo: Z00#findRight"
+findRight p =
+  satisfy moveRight (p . getFocus)
 
 -- | Move the zipper focus left until the focus satisfies the given predicate.
 --
@@ -496,8 +524,8 @@ findLeft ::
   (x -> Bool)
   -> FiveOfZipper x
   -> Maybe (FiveOfZipper x)
-findLeft =
-  error "todo: Z00#findLeft"
+findLeft p =
+  satisfy moveLeft (p . getFocus)
 
 -- | If the zipper focus satisfies the given predicate, return the given zipper.
 -- Otherwise, move the zipper focus left until the focus satisfies the given predicate.
@@ -527,8 +555,12 @@ findRightIncl p z =
 example1 ::
   FiveOf Integer
   -> Maybe (FiveOf Integer)
-example1 =
-  error "todo: Z00#example1"
+example1 is =
+  let firstEven =
+        findRightIncl even (toFiveOfZipper is)
+      add1Focus =
+        fromFiveOfZipper . modifyFocus (+1)
+  in  fmap add1Focus (firstEven >>= moveLeft)
 
 -- | Given 5 numbers, find the first multiple of 7,
 -- then modulo that number with 5 and move the zipper to that (position+1) and
@@ -551,5 +583,9 @@ example1 =
 example2 ::
   FiveOf Integer
   -> Maybe Integer
-example2 =
-  error "todo: Z00#example2"
+example2 is =
+  let firstMod7 =
+        findRightIncl (\x -> x `mod` 7 == 0) (toFiveOfZipper is)
+      moveTo5 =
+        getFocus . (fromInteger . getFocus >>= moveCycle)
+  in  fmap moveTo5 firstMod7
