@@ -121,7 +121,7 @@ toFiveOfZipper =
 
 -- | Create five values from a zipper.
 --
--- λ> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- >>> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 -- FiveOf "a" "b" "c" "d" "e"
 --
 -- >>> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
