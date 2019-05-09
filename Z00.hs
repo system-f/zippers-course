@@ -405,6 +405,9 @@ modifyFocus =
 --
 -- >>> setFocus 99 (FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 14))
 -- FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 99)
+--
+-- >>> modifyFocus (++"z") (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "ez")
 setFocus ::
   x
   -> FiveOfZipper x
