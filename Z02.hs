@@ -97,8 +97,9 @@ extend =
   error "todo: Z02#extend"
 
 -- | Implement composition. Note that this type signature is the same as the signature for
--- (.) :: (f y -> z) -> (f x -> y) -> f x -> z
+-- (.) :: (  y -> z) -> (  x -> y) ->   x -> z
 -- However, the functor wraps every argument position.
+--     :: (f y -> z) -> (f x -> y) -> f x -> z
 --
 -- >>> comonadCompose sum sum [99,88,77]
 -- 506
