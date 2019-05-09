@@ -241,46 +241,46 @@ moveLeftCycle =
 -- If the zipper focus moves off the right-most or left-most position, return `Nothing`.
 --
 -- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 --
 -- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 --
 -- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
 --
 -- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 --
 -- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 --
 -- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 --
 -- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
 -- Nothing
 --
 -- >>> move 3 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
 --
 -- >>> move 3 (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- Nothing
 --
 -- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
 --
 -- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 --
 -- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 -- Nothing
 --
 -- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 --
 -- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
+-- Just (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 --
 -- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 -- Nothing
@@ -335,22 +335,22 @@ move =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
---
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
---
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
---
--- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
---
--- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
--- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
+--
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+--
+-- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e")
+--
+-- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+--
+-- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 --
 -- >>> moveCycle 15 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
@@ -365,10 +365,10 @@ move =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-16) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
 --
 -- >>> moveCycle (-19) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 moveCycle ::
   Int
   -> FiveOfZipper x
@@ -405,9 +405,6 @@ modifyFocus =
 --
 -- >>> setFocus 99 (FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 14))
 -- FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 99)
---
--- >>> modifyFocus (++"z") (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "ez")
 setFocus ::
   x
   -> FiveOfZipper x
