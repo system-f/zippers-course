@@ -79,7 +79,7 @@ subtract1Cycle Four =
   Three
 subtract1Cycle Five =
   Four
-  
+
 -- d/dx. Five x
 -- FiveOfDerivative x ~ 5 * x * x * x * x
 data FiveOfDerivative x =
@@ -121,7 +121,7 @@ toFiveOfZipper (FiveOf x1 x2 x3 x4 x5) =
 
 -- | Create five values from a zipper.
 --
--- λ> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- >>> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
 -- FiveOf "a" "b" "c" "d" "e"
 --
 -- >>> fromFiveOfZipper (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
@@ -237,8 +237,59 @@ moveLeftCycle (FiveOfZipper x1 (FiveOfDerivative p x2 x3 x4 x5)) =
 --   * to the right if positive
 --
 -- /Tip/ Use `moveLeft` and `moveRight`
--- 
+--
 -- If the zipper focus moves off the right-most or left-most position, return `Nothing`.
+--
+-- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+--
+-- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+--
+-- >>> move 0 (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+--
+-- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
+--
+-- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+--
+-- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
+--
+-- >>> move 1 (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- Nothing
+--
+-- >>> move 3 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+--
+-- >>> move 3 (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
+-- Nothing
+--
+-- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+--
+-- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+--
+-- >>> move (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Nothing
+--
+-- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+--
+-- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+-- Just (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+--
+-- >>> move (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
+-- Nothing
+--
+-- >>> move 15 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Nothing
+--
+-- >>> move (-15) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- Nothing
 move ::
   Int
   -> FiveOfZipper x
@@ -253,8 +304,8 @@ move n =
 --   * to the right if positive
 --
 -- /Tip/ Use `moveLeftCycle` and `moveRightCycle`
--- /Tip/ Use `mod` to improve efficiency
--- 
+-- /Tip/ Use `rem` to improve efficiency
+--
 -- If the zipper focus moves off the right-most cycle to the left-most position.
 -- If the zipper focus moves off the left-most cycle to the right-most position.
 --
@@ -286,22 +337,22 @@ move n =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
---
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
 --
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+--
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 --
 -- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e")
---
--- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
 --
+-- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
+--
 -- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
 --
 -- >>> moveCycle 15 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
@@ -316,16 +367,16 @@ move n =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-16) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 --
 -- >>> moveCycle (-19) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
 moveCycle ::
   Int
   -> FiveOfZipper x
   -> FiveOfZipper x
 moveCycle n =
-  let n' = abs (n `mod` 5)
+  let n' = abs (n `rem` 5)
       k = if n < 0 then moveLeftCycle else moveRightCycle
   in  foldr (.) id . replicate n' $ k
 
@@ -339,6 +390,9 @@ moveCycle n =
 --
 -- >>> modifyFocus (+1) (FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 14))
 -- FiveOfZipper 10 (FiveOfDerivative Five 11 12 13 15)
+--
+-- >>> modifyFocus (++"z") (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "ez")
 modifyFocus ::
   (x -> x)
   -> FiveOfZipper x

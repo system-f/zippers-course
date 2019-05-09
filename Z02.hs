@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Z03 where
+module Z02 where
 
 import Z00(FiveOfZipper(FiveOfZipper), FiveOfDerivative(FiveOfDerivative), UpToFive(One, Two, Three, Four, Five))
 import qualified Z00 as Z00
