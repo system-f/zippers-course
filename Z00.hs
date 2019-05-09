@@ -335,22 +335,23 @@ move =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
---
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
 --
--- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+--
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+--
+-- >>> moveCycle (-1) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 --
 -- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Three "b" "c" "d" "e")
---
--- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
 --
+-- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e"))
+-- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
+--
 -- >>> moveCycle (-3) (FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Four "b" "c" "d" "e")
 --
 -- >>> moveCycle 15 (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
@@ -365,10 +366,10 @@ move =
 -- FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e")
 --
 -- >>> moveCycle (-16) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
 --
 -- >>> moveCycle (-19) (FiveOfZipper "a" (FiveOfDerivative One "b" "c" "d" "e"))
--- FiveOfZipper "a" (FiveOfDerivative Five "b" "c" "d" "e")
+-- FiveOfZipper "a" (FiveOfDerivative Two "b" "c" "d" "e")
 moveCycle ::
   Int
   -> FiveOfZipper x
