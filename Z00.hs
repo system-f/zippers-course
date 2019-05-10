@@ -596,7 +596,7 @@ findRightIncl p z =
 -- Returns `Nothing` if the first number is even,
 -- or there are no even numbers.
 --
--- /Tip/ Use `findRightIncl` and `add1Focus` and `moveLeft`
+-- /Tip/ Use `findRightIncl` and `moveLeft`
 --
 -- >>> example1 (FiveOf 11 33 55 66 99)
 -- Just (FiveOf 11 33 56 66 99)
