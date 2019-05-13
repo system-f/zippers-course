@@ -399,8 +399,8 @@ findLeftIncl p z =
 
 -- | Given a list of integers, on the second-to-last even integer in the list,
 -- add 99 to the subsequent element.
--- If the list does not have a second-to-last even number, or,
--- it does but that is the last element, leave the list unchanged.
+-- If the list does not have a second-to-last even number, leave the list
+-- unchanged.
 -- Assume all lists are finite length.
 --
 -- /Tip/ Use `findLeftIncl` to find the last and `findLeft` to find the second-to-last
