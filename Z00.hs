@@ -592,13 +592,13 @@ example1 =
 -- /Tip/ Use `findRightIncl` and `moveCycle`
 --
 -- >>> example2 (FiveOf 22 33 44 77 99)
--- Just 22
+-- Just 33
 --
 -- >>> example2 (FiveOf 14 33 44 77 99)
--- Just 99
+-- Just 14
 --
 -- >>> example2 (FiveOf 35 33 44 77 99)
--- Just 35
+-- Just 33
 --
 -- >>> example2 (FiveOf 22 33 44 78 99)
 -- Nothing
