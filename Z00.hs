@@ -617,8 +617,8 @@ example1 is =
   in  fmap add1Focus (firstEven >>= moveLeft)
 
 -- | Given 5 numbers, find the first multiple of 7,
--- then modulo that number with 5 and move the zipper to that (position+1) and
--- return the focus.
+-- then modulo that number with 5 and move right (cycling at the right-most
+-- position) the zipper to that (position+1) and return the focus.
 -- Returns `Nothing` if there is no multiple of 7.
 --
 -- /Tip/ Use `findRightIncl` and `moveCycle`
