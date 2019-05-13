@@ -421,14 +421,32 @@ findLeftIncl p z =
 
 -- | Given a list of integers, on the second-to-last even integer in the list,
 -- add 99 to the subsequent element.
--- If the list does not have a second-to-last even number, or,
--- it does but that is the last element, leave the list unchanged.
+-- If the list does not have a second-to-last even number, leave the list
+-- unchanged.
 -- Assume all lists are finite length.
 --
 -- /Tip/ Use `findLeftIncl` to find the last and `findLeft` to find the second-to-last
 -- /Tip/ Write a utility function :: (x -> Bool) -> [x] -> Maybe (ListZipper x)
 --       which makes a zipper, moves the focus to the end, moves left to the last even number,
 --       then moves left to the second-to-last even number.
+--
+-- >>> example1 []
+-- []
+-- 
+-- >>> example1 [1]
+-- [1]
+-- 
+-- >>> example1 [2]
+-- [2]
+-- 
+-- >>> example1 [2,3]
+-- [2,3]
+-- 
+-- >>> example1 [2,3,4]
+-- [2,102,4]
+-- 
+-- >>> example1 [1,33,77,222,3,4]
+-- [1,33,77,222,102,4]
 example1 ::
   Integral x =>
   [x]
