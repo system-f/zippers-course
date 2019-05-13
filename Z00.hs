@@ -641,5 +641,5 @@ example2 is =
   let firstMod7 =
         findRightIncl (\x -> x `mod` 7 == 0) (toFiveOfZipper is)
       moveTo5 =
-        getFocus . (fromInteger . getFocus >>= moveCycle)
+        getFocus . (fromInteger . (+1) . getFocus >>= moveCycle)
   in  fmap moveTo5 firstMod7
