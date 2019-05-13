@@ -407,6 +407,24 @@ findLeftIncl p z =
 -- /Tip/ Write a utility function :: (x -> Bool) -> [x] -> Maybe (ListZipper x)
 --       which makes a zipper, moves the focus to the end, moves left to the last even number,
 --       then moves left to the second-to-last even number.
+--
+-- >>> example1 []
+-- []
+-- 
+-- >>> example1 [1]
+-- [1]
+-- 
+-- >>> example1 [2]
+-- [2]
+-- 
+-- >>> example1 [2,3]
+-- [2,3]
+-- 
+-- >>> example1 [2,3,4]
+-- [2,102,4]
+-- 
+-- >>> example1 [1,33,77,222,3,4]
+-- [1,33,77,222,102,4]
 example1 ::
   Integral x =>
   [x]
